@@ -1,3 +1,5 @@
+open Import
+
 type stanza = Stanza.t = ..
 
 module Stanza = struct
@@ -9,6 +11,7 @@ module Stanza = struct
     { flags          : Ordered_set_lang.Unexpanded.t
     ; ocamlc_flags   : Ordered_set_lang.Unexpanded.t
     ; ocamlopt_flags : Ordered_set_lang.Unexpanded.t
+    ; env            : (string * string) list
     }
 
   type pattern =
@@ -20,12 +23,17 @@ module Stanza = struct
     ; rules : (pattern * config) list
     }
 
+  let env_field =
+    let open Stanza.Of_sexp in
+    list (pair string string)
+
   let config =
     let%map flags = field_oslu "flags"
     and ocamlc_flags = field_oslu "ocamlc_flags"
     and ocamlopt_flags = field_oslu "ocamlopt_flags"
+    and env = field "env" ~default:[] env_field
     in
-    { flags; ocamlc_flags; ocamlopt_flags }
+    { flags; ocamlc_flags; ocamlopt_flags; env }
 
   let rule =
     enter
@@ -42,6 +50,12 @@ module Stanza = struct
     and rules = repeat rule
     in
     { loc; rules }
+
+  let find t ~profile =
+    List.find_map t.rules ~f:(fun (pat, cfg) ->
+      match pat with
+      | Any -> Some cfg
+      | Profile a -> Option.some_if (a = profile) cfg)
 
 end
 
