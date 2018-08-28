@@ -1284,9 +1284,19 @@ let update_universe t =
   make_local_dirs t (Path.Set.singleton Path.build_dir);
   Io.write_file universe_file (Dsexp.to_string ~syntax:Dune (Dsexp.To_sexp.int n))
 
+let env_file = Path.relative Path.build_dir ".env"
+
+let update_env_file env =
+  Marshal.to_string env []
+  |> Digest.string
+  |> Digest.to_hex
+  |> Io.write_file env_file
+
 let do_build t ~request =
   entry_point t ~f:(fun () ->
     update_universe t;
+    let env_context = Option.value_exn @@ String.Map.find t.contexts "default" in
+    update_env_file env_context.env;
     eval_request t ~request ~process_target:(wait_for_file ~loc:None t))
 
 module Ir_set = Set.Make(Internal_rule)

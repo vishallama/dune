@@ -308,6 +308,7 @@ module Dep_conf = struct
     | Source_tree of String_with_vars.t
     | Package of String_with_vars.t
     | Universe
+    | Env
 
   let remove_locs = function
     | File sw -> File (String_with_vars.remove_locs sw)
@@ -317,6 +318,7 @@ module Dep_conf = struct
     | Source_tree sw -> Source_tree (String_with_vars.remove_locs sw)
     | Package sw -> Package (String_with_vars.remove_locs sw)
     | Universe -> Universe
+    | Env -> Env
 
   let dparse =
     let dparse =
@@ -337,6 +339,7 @@ module Dep_conf = struct
           (let%map () = Syntax.since Stanza.syntax (1, 0)
            and x = sw in
            Source_tree x)
+        ; "env", return Env
         ]
     in
     if_list
@@ -365,6 +368,8 @@ module Dep_conf = struct
            ; String_with_vars.dgen t]
     | Universe ->
       Dsexp.unsafe_atom_of_string "universe"
+    | Env ->
+      Dsexp.unsafe_atom_of_string "env"
 
   let to_sexp t = Dsexp.to_sexp (dgen t)
 end

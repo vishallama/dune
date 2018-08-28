@@ -195,6 +195,9 @@ val do_build
 (** File for the [(universe)] dependency. *)
 val universe_file : Path.t
 
+(** File for the [(env)] dependency. *)
+val env_file : Path.t
+
 val is_target : t -> Path.t -> bool
 
 (** Return all the library dependencies (as written by the user)

@@ -768,6 +768,9 @@ module Deps = struct
     | Universe ->
       Build.path Build_system.universe_file
       >>^ fun () -> []
+    | Env ->
+      Build.path Build_system.env_file
+      >>^ fun () -> []
 
   let interpret t ~scope ~dir l =
     List.map l ~f:(dep t ~scope ~dir)
