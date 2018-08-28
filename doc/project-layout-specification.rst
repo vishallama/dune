@@ -40,9 +40,8 @@ Comments
 --------
 
 The Dune language only has end of line comments. End of line comments
-are introduced with a semicolon and span up to the end of the end of
-the current line. Everything from the semicolon to the end of the line
-is ignored. For instance:
+are introduced with a semicolon and span up to the end of the current line.
+Everything from the semicolon to the end of the line is ignored. For instance:
 
 .. code::
 
