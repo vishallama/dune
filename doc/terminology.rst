@@ -61,11 +61,11 @@ Terminology
 - **environment**: in dune, each directory has an environment
   attached to it. The environment determines the default values of
   various parameters, such as the compilation flags. Inside a scope,
-  each directory inherit the environment from its parent. At the root
+  each directory inherits the environment from its parent. At the root
   of every scope, a default environment is used. At any point, the
   environment can be altered using an :ref:`dune-env` stanza.
 
-- **build profile**: a global setting that influence various
+- **build profile**: a global setting that influences various
   defaults. It can be set from the command line using ``--profile
   <profile>`` or from ``dune-workspace`` files. The following
   profiles are standard:
